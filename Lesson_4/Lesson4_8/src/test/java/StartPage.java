@@ -24,7 +24,7 @@ public class StartPage extends SeleniumSettings {
     @FindBy(xpath = "//h3[contains(text(), 'Most Popular')]")
     WebElement mostPopularCategories;
 
-    private final By product = By.xpath("//li[@class='product column shadow hover-light']/a[@class='link']");
+    private final By product = By.xpath("//div[@class='image-wrapper']");
 
 
 //Заъодим на главную страницу litecart
