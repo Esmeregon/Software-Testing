@@ -2,8 +2,11 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 
 public class CheckCart {
@@ -29,6 +32,7 @@ public class CheckCart {
     private final By removeButton = By.xpath("//button[@name= 'remove_cart_item']");
     private final By emptyCartMessage = By.xpath("//em");
     private final By products = By.xpath("//li[@class='shortcut']");
+    private final By cartItems = By.xpath("//td[@class='unit-cost']");
 
 //Заходим в учебное приложение
     public void goToLitecart(){
@@ -59,9 +63,15 @@ public class CheckCart {
 
 //Удаление продуктов из корзины
     public void productRemoval(){
-        while (driver.findElements(products).size() > 0){
+        List<WebElement>removedItems = driver.findElements(cartItems);
+        for (int i = 0; i < removedItems.size(); i++){
+            if (driver.findElements(products).size() > 1){
+                wait.until(ExpectedConditions.elementToBeClickable(products));
+                driver.findElement(products).click();
+            }
             wait.until(ExpectedConditions.elementToBeClickable(removeButton));
             driver.findElement(removeButton).click();
+            wait.until(ExpectedConditions.stalenessOf(removedItems.get(0)));
         }
         Assert.assertEquals("There are no items in your cart.", driver.findElement(emptyCartMessage).getText());
     }

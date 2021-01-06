@@ -18,10 +18,12 @@ public class SeleniumSettings {
         wait = new WebDriverWait(driver, 10);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
-
+/*
     @After
     public void complete(){
         driver.quit();
     }
+
+ */
 
 }
