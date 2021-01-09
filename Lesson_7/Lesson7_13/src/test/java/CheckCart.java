@@ -32,7 +32,8 @@ public class CheckCart {
     private final By removeButton = By.xpath("//button[@name= 'remove_cart_item']");
     private final By emptyCartMessage = By.xpath("//em");
     private final By products = By.xpath("//li[@class='shortcut']");
-    private final By cartItems = By.xpath("//td[@class='unit-cost']");
+    private final By cartItems = By.xpath("//td[@class='item']");
+    private final By itemName = By.xpath("//a/strong");
 
 //Заходим в учебное приложение
     public void goToLitecart(){
@@ -65,15 +66,24 @@ public class CheckCart {
     public void productRemoval(){
         List<WebElement>removedItems = driver.findElements(cartItems);
         for (int i = 0; i < removedItems.size(); i++){
-            if (driver.findElements(products).size() > 1){
+            if (removedItems.size() > 1){
+                List<WebElement>items = driver.findElements(products);
                 wait.until(ExpectedConditions.elementToBeClickable(products));
-                driver.findElement(products).click();
+                items.get(0).click();
+                wait.until(ExpectedConditions.elementToBeClickable(removeButton));
+                driver.findElement(removeButton).click();
+                wait.until(ExpectedConditions.stalenessOf(removedItems.get(0)));
+                wait.until(ExpectedConditions.stalenessOf(items.get(0)));
+                removedItems = driver.findElements(cartItems);
+                driver.findElements(products);
+                Assert.assertEquals(driver.findElement(itemName).getText(), removedItems.get(0).getText());
             }
-            wait.until(ExpectedConditions.elementToBeClickable(removeButton));
-            driver.findElement(removeButton).click();
-            wait.until(ExpectedConditions.stalenessOf(removedItems.get(0)));
+            if (removedItems.size() == 1){
+                wait.until(ExpectedConditions.elementToBeClickable(removeButton));
+                driver.findElement(removeButton).click();
+                Assert.assertEquals("There are no items in your cart.", driver.findElement(emptyCartMessage).getText());
+            }
         }
-        Assert.assertEquals("There are no items in your cart.", driver.findElement(emptyCartMessage).getText());
     }
 
 }
