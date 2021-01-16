@@ -24,7 +24,6 @@ public class CartPage {
     private final By products = By.xpath("//li[@class='shortcut']");
     private final By cartItems = By.xpath("//td[@class='item']");
     private final By itemName = By.xpath("//a/strong");
-
     private final By checkoutButton = By.linkText("Checkout »");
 
 //Переходим в корзину
